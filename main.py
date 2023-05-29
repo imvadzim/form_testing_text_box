@@ -11,7 +11,11 @@
 # Сравнить введенные данные с полученными данными из поля в котором будут все заполненные данные.
 #
 # Фреймворк закинуть в репозиторий и дать ссылку.
-
+#
+# Добавить рандомные данные (сфокусируйся на качественной проверке)
+# Добавить структуру
+# Добавить requirements
+# Посмотреть, что ещё можно улучшить (pytest и т.д.)
 
 # Import all necessary libraries
 from selenium import webdriver
@@ -41,11 +45,10 @@ class TextBoxPage(BasePage):
         self.driver.find_element(*self.current_address_input).send_keys(address)
 
     def enter_permanent_address(self, address):
-        self.driver.find_element(*self.submit_button).click()
+        self.driver.find_element(*self.permanent_address_input).send_keys(address)
 
     def click_submit(self):
         self.driver.find_element(*self.submit_button).click()
-
 
 # Create submit test
 def test_fill_text_boxes(driver):
@@ -59,6 +62,7 @@ def test_fill_text_boxes(driver):
     text_box_page.enter_permanent_address("Delhi, India")
     text_box_page.click_submit()
 
+    # Todo compare the data with the input
 
 # Initialization WebDriver with the Chrome browser
 if __name__ == "__main__":
