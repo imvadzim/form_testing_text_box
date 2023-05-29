@@ -12,14 +12,13 @@
 #
 # Фреймворк закинуть в репозиторий и дать ссылку.
 #
-# Добавить рандомные данные (сфокусируйся на качественной проверке)
 # Добавить структуру
-# Добавить requirements
 # Посмотреть, что ещё можно улучшить (pytest и т.д.)
 
 # Import all necessary libraries
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from faker import Faker
 
 # Create BasePage class
 class BasePage:
@@ -33,8 +32,9 @@ class TextBoxPage(BasePage):
     current_address_input = (By.ID, "currentAddress")
     permanent_address_input = (By.ID, "permanentAddress")
     submit_button = (By.ID, "submit")
+    output = (By.ID, "output")
 
-    # Create separate methods for filling the form
+    # Create separate methods for interacting with elements
     def enter_full_name(self, full_name):
         self.driver.find_element(*self.full_name_input).send_keys(full_name)
 
@@ -50,28 +50,45 @@ class TextBoxPage(BasePage):
     def click_submit(self):
         self.driver.find_element(*self.submit_button).click()
 
-    # Todo add finding elements for checking
+    def check_the_output(self, data):
+        output = self.driver.find_element(*self.output).text.split("\n")
+        assert output[0] == 'Name:' + data[0]  # todo do we need replace here also?
+        assert output[1] == 'Email:' + data[1]  # todo do we need replace here also?
+        assert output[2] == 'Current Address :' + data[2].replace('\n', ' ')  # todo 'Current Address:'
+        assert output[3] == 'Permananet Address :' + data[3].replace('\n', ' ')  # todo 'Permanent Address:'
 
 # Create submit test
 def test_fill_text_boxes(driver):
     url = "https://demoqa.com/text-box"
     driver.get(url)
+    fake = Faker()
+
+    data = [fake.name(),
+            fake.email(),
+            fake.address(),
+            fake.address()]
 
     text_box_page = TextBoxPage(driver)
-    text_box_page.enter_full_name("Lev Leschenko")
-    text_box_page.enter_email("lyova.mozhet@yaschik.ru")
-    text_box_page.enter_current_address("666 St.Pitersburg")
-    text_box_page.enter_permanent_address("Delhi, India")
+    text_box_page.enter_full_name(data[0])
+    text_box_page.enter_email(data[1])
+    text_box_page.enter_current_address(data[2])
+    text_box_page.enter_permanent_address(data[3])
     text_box_page.click_submit()
 
-    # Todo compare the data with the input
+    # compare the data with the input
+    text_box_page.check_the_output(data)
+    # todo think how to organize tests
+    # todo create a proper structure
 
 # Initialization WebDriver with the Chrome browser
 if __name__ == "__main__":
     web_driver = webdriver.Chrome()
-    web_driver.implicitly_wait(10)  # Wait for elements to load TODO maybe it should be changed
+    # open the browser window in full screen
+    # web_driver.maximize_window()
+    # wait for elements to load
+    web_driver.implicitly_wait(10)  # todo change to explicit
 
-    # Attempt to fill the form and submit
+    # an attempt to fill the form and submit
     try:
         test_fill_text_boxes(web_driver)
         print("Test succeeded!")
