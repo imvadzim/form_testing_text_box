@@ -50,6 +50,8 @@ class TextBoxPage(BasePage):
     def click_submit(self):
         self.driver.find_element(*self.submit_button).click()
 
+    # Todo add finding elements for checking
+
 # Create submit test
 def test_fill_text_boxes(driver):
     url = "https://demoqa.com/text-box"
