@@ -11,9 +11,7 @@
 # Сравнить введенные данные с полученными данными из поля в котором будут все заполненные данные.
 #
 # Фреймворк закинуть в репозиторий и дать ссылку.
-#
-# Добавить структуру
-# Посмотреть, что ещё можно улучшить (pytest и т.д.)
+
 
 # Import all necessary libraries
 from selenium import webdriver
@@ -79,14 +77,17 @@ def test_fill_text_boxes(driver):
     text_box_page.check_the_output(data)
     # todo think how to organize tests
     # todo create a proper structure
+    # todo implement pytest
+    # todo generate different tests with proper test strategy
+    # todo other improvements
 
 # Initialization WebDriver with the Chrome browser
 if __name__ == "__main__":
     web_driver = webdriver.Chrome()
     # open the browser window in full screen
-    # web_driver.maximize_window()
+    web_driver.maximize_window()
     # wait for elements to load
-    web_driver.implicitly_wait(10)  # todo change to explicit
+    web_driver.implicitly_wait(10)  # todo change to explicit: wait for a proper page appearance
 
     # an attempt to fill the form and submit
     try:
